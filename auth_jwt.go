@@ -44,6 +44,9 @@ type JWTMiddleware struct {
 	// only after an authentication success. Must return true on success, false on failure.
 	// Optional, default to success.
 	Authorizator func(userId string, request *rest.Request) bool
+	
+	// need prompt return on unauthorized
+	needPrompt bool
 }
 
 // MiddlewareFunc makes JWTMiddleware implement the Middleware interface.
@@ -185,6 +188,8 @@ func (mw *JWTMiddleware) RefreshHandler(writer rest.ResponseWriter, request *res
 }
 
 func (mw *JWTMiddleware) unauthorized(writer rest.ResponseWriter) {
-	writer.Header().Set("WWW-Authenticate", "Basic realm="+mw.Realm)
-	rest.Error(writer, "Not Authorized", http.StatusUnauthorized)
+	if mw.needPrompt {
+		writer.Header().Set("WWW-Authenticate", "Basic realm="+mw.Realm)
+		rest.Error(writer, "Not Authorized", http.StatusUnauthorized)
+	}
 }
