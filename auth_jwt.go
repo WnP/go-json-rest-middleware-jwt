@@ -191,5 +191,7 @@ func (mw *JWTMiddleware) unauthorized(writer rest.ResponseWriter) {
 	if mw.NeedPrompt {
 		writer.Header().Set("WWW-Authenticate", "Basic realm="+mw.Realm)
 		rest.Error(writer, "Not Authorized", http.StatusUnauthorized)
+	} else {
+		writer.WriteJson(&map[string]string{"Error": "Not Authorized"})
 	}
 }
