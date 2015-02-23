@@ -46,7 +46,7 @@ type JWTMiddleware struct {
 	Authorizator func(userId string, request *rest.Request) bool
 	
 	// need prompt return on unauthorized
-	needPrompt bool
+	NeedPrompt bool
 }
 
 // MiddlewareFunc makes JWTMiddleware implement the Middleware interface.
